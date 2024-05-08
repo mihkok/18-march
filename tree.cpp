@@ -1,41 +1,40 @@
 #include <iostream>
 #include <map>
-#include <vector>
+#include <string>
 
 using namespace std;
 
-class GenealogicalTree {
-private:
-    map<int, vector<int>> tree; // Карта для хранения древа: ключ - высота, значение - вектор узлов на этой высоте
+int main() {
+    int N;
+    cin >> N;
 
-public:
-    // Добавление родителя с заданной высотой и его детей
-    void addParent(int height, const vector<int>& children) {
-        tree[height] = children;
+    map<string, int> heights;
+    map<string, string> parents;
+
+
+    for (int i = 0; i < N - 1; ++i) {
+        string child, parent;
+        cin >> child >> parent;
+        parents[child] = parent;
     }
 
-    // Вывод генеалогического древа
-    void printTree() {
-        for (const auto& pair : tree) {
-            cout << "Высота " << pair.first << ": ";
-            for (int node : pair.second) {
-                cout << node << " ";
+
+    for (auto const& [child, parent] : parents) {
+        if (heights.find(child) == heights.end()) {
+            string current = child;
+            int height = 0;
+            while (parents.find(current) != parents.end()) {
+                height++;
+                current = parents[current];
             }
-            cout << endl;
+            heights[child] = height;
         }
     }
-};
 
-int main() {
-    GenealogicalTree familyTree;
-
-    // Пример заполнения генеалогического древа
-    familyTree.addParent(0, {1, 2}); // У родоначальника высота 0, у него два потомка
-    familyTree.addParent(1, {3, 4, 5}); // У первого потомка высота 1, у него три потомка
-    familyTree.addParent(2, {6, 7}); // У второго потомка высота 1, у него два потомка
-
-    // Вывод генеалогического древа
-    familyTree.printTree();
+    // Output
+    for (auto const& [name, height] : heights) {
+        cout << name << " " << height << endl;
+    }
 
     return 0;
 }
